@@ -1,7 +1,7 @@
-import { Body, Controller, Post, HttpException, HttpStatus, Get, Param, HttpCode } from '@nestjs/common';
+import { Body, Controller, Post, HttpException, HttpStatus, Get, Param, Res, HttpCode } from '@nestjs/common';
 import { UserService } from '../service/user.service';
 import { User } from 'src/shared/models/user.model';
-
+import { Response } from 'express';
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
@@ -24,6 +24,16 @@ export class UserController {
     }
   }
 
+  @Get('/current')
+  async current(@Res() res: Response): Promise<void> {
+    try {
+      const user = await this.userService.find(res.locals.jwtPayload.key);
+      res.status(200).json(user);
+    } catch (error) {
+      throw new HttpException({ message: 'User not found', error }, HttpStatus.NOT_FOUND);
+    }
+  }
+
   @Get('/:id')
   async find(@Param('id') id: string): Promise<User> {
     try {
@@ -32,6 +42,7 @@ export class UserController {
       throw new HttpException({ message: 'User not found' }, HttpStatus.NOT_FOUND);
     }
   }
+
 
   // @Post('/check/pseudo')
   // @HttpCode(200)
