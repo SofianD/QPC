@@ -1,7 +1,7 @@
 import express = require('express');
 import socketIo = require('socket.io');
 import { createServer, Server } from 'http';
-import { User } from 'src/shared/models/user.model';
+import { User } from 'src/shared/models/user.interface';
 
 export class SocketApp {
     private static readonly PORT = 8080;
