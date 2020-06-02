@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
       token,
       '167CD6DC2E719C1CE671DBAEA8465',
       (err, decoded) => {
-        context.switchToHttp().getResponse().locals.jwtPayload = decoded;   // à tester
+        context.switchToHttp().getResponse().locals.jwtPayload = decoded;
         return err ? false : true;
       }
     ) as any;

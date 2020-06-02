@@ -1,12 +1,14 @@
-import { Body, Controller, Post, HttpException, HttpStatus, Get, Param, Res, HttpCode } from '@nestjs/common';
+import { Body, Controller, Post, HttpException, HttpStatus, Get, Param, Res, HttpCode, UseGuards } from '@nestjs/common';
 import { UserService } from '../service/user.service';
 import { User } from 'src/shared/models/user.model';
 import { Response } from 'express';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Post()
+  @UseGuards(AuthGuard)
   async create(@Body() user: User): Promise<void> {
     if (!user.email || !user.password) {
       throw new HttpException({ message: 'Invalid user' }, HttpStatus.BAD_REQUEST);
@@ -25,6 +27,7 @@ export class UserController {
   }
 
   @Get('/current')
+  @UseGuards(AuthGuard)
   async current(@Res() res: Response): Promise<void> {
     try {
       const user = await this.userService.find(res.locals.jwtPayload.key);

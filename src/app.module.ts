@@ -18,13 +18,7 @@ import { UserController } from './core/user/controller/user.controller';
     UserModule,
     AuthModule,
   ],
-  controllers: [AuthController],
+  controllers: [],
   providers: [],
 })
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes(UserController);
-  }
-}
+export class AppModule {}
