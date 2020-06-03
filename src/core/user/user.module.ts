@@ -8,7 +8,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from '../auth/module/auth.module';
 
 @Module({
-  imports: [TypegooseModule.forFeature([User]), forwardRef(() => AuthModule)],
+  imports: [
+    TypegooseModule.forFeature([User])
+  ],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService],
