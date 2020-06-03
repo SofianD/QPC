@@ -5,6 +5,7 @@ import { AuthModule } from './core/auth/module/auth.module';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { AuthMiddleware } from './core/auth/middleware/auth.middleware';
 import { UserController } from './core/user/controller/user.controller';
+import { AuthenticationModule } from './core/authentication/authentication.module';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { UserController } from './core/user/controller/user.controller';
       }
     ),
     UserModule,
-    AuthModule,
+    AuthenticationModule
   ],
   controllers: [],
   providers: [],
