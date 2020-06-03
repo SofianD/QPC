@@ -3,13 +3,14 @@ import { UserService } from '../service/user.service';
 import { User } from 'src/shared/models/user.model';
 import { Response } from 'express';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
+import * as jwt from 'jsonwebtoken';
+
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
-  async create(@Body() user: User): Promise<void> {
+  async create(@Body('user') user: User): Promise<{user: any, accessToken: string, expiresIn: number}> {
     if (!user.email || !user.password) {
       throw new HttpException({ message: 'Invalid user' }, HttpStatus.BAD_REQUEST);
     }
@@ -20,10 +21,19 @@ export class UserController {
     }
 
     try {
-      await this.userService.create(user);
+      const userInDb = await this.userService.create(user);
+      return {
+        user: userInDb,
+        accessToken: jwt.sign(
+            {key: userInDb._id},
+            '167CD6DC2E719C1CE671DBAEA8465'
+        ),
+        expiresIn: 3600
+    };
     } catch (error) {
       throw new HttpException({ message: 'Failed to save user' }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    
   }
 
   @Get('/current')

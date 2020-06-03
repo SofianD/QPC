@@ -14,7 +14,9 @@ export class UserService {
 
     try {
       await model.hashPassword();
-      await model.save();
+      const createdUser = await model.save() as any;
+      const {__v, password, ...newUser} = createdUser._doc;
+      return newUser;
     } catch (error) {
       throw Error(error);
     }
