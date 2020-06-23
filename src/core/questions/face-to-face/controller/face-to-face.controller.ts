@@ -1,43 +1,28 @@
-import { Controller, Get, Post, UseGuards, Body, Put, Delete } from '@nestjs/common';
-import { FaceToFaceService } from '../service/face-to-face.service';
-import { AuthGuard } from 'src/shared/guards/auth.guard';
-import { FaceToFace } from 'src/shared/models/face-to-face.interface';
+import { Controller, Get, HttpException, HttpStatus, Param } from '@nestjs/common';
+import { QuestionService } from '../../question/service/question.service';
+
 
 @Controller('face-to-face')
 export class FaceToFaceController {
+    
     constructor(
-        private readonly faceService: FaceToFaceService
+        private readonly questionService: QuestionService
     ) {}
 
     @Get()
-    async getQuestions(): Promise<any> {
-        return;
+    async getQuestions() {
+        const questions = await this.questionService.getAll();
+        if (questions.length === 0) throw new HttpException('No question found', HttpStatus.NOT_FOUND);
+
+        return questions;
     }
 
     @Get(':id')
-    async getQuestion(): Promise<any> {
-        return;
-    }
-
-    @Post()
-    @UseGuards(AuthGuard)
-    async addQuestion(
-        @Body('questions') questions: FaceToFace[]
+    async getQuestion(
+        @Param('id') id: string
     ) {
-        return;
-    }
-
-    @Put(':id')
-    @UseGuards(AuthGuard)
-    async updateQuestion(
-        @Body('question') question: FaceToFace
-    ) {
-        return;
-    }
-
-    @Delete(':id')
-    @UseGuards(AuthGuard)
-    async deleteQuestion() {
-        return;
+        const question = await this.questionService.getOne(id);
+        if (question === null) throw new HttpException('Not found' , HttpStatus.NOT_FOUND);
+        return question;
     }
 }

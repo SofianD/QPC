@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { FaceToFaceController } from './controller/face-to-face.controller';
-import { FaceToFaceService } from './service/face-to-face.service';
+import { QuestionService } from '../question/service/question.service';
+
 
 @Module({
     imports: [],
@@ -8,7 +9,7 @@ import { FaceToFaceService } from './service/face-to-face.service';
         FaceToFaceController
     ],
     providers: [
-        FaceToFaceService
+        QuestionService
     ]
 })
 export class FaceToFaceModule {}

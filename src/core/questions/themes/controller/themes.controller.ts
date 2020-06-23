@@ -26,7 +26,7 @@ export class ThemesController {
 
     @Post()
     @UseGuards(AuthGuard)
-    async addThemes(
+    async addTheme(
         @Body('theme') theme: Themes
     ) {
         
